@@ -1,6 +1,9 @@
 import { Component } from "react";
 import "./Countdown.css";
 
+let array = [];
+let delta = 1000;
+
 export default class Countdown extends Component {
   state = {
     intervalId: null,
@@ -53,21 +56,33 @@ export default class Countdown extends Component {
     }
   };
 
+  handleWait = () => {
+    array.push(Date.now());
+
+    if (array.length === 3) {
+      array.shift();
+      delta = array[1] - array[0];
+    }
+
+    if (delta <= 300) {
+      console.log("Countdown is PAUSED");
+
+      clearInterval(this.state.intervalId);
+
+      this.setState({ isStarted: false });
+
+      array = [];
+      delta = 1000;
+    }
+  };
+
   handleReset = () => {
     console.log("Countdown is RESET");
     this.setState({ seconds: 0, minutes: 0, hours: 0 });
   };
 
-  handleWait = () => {
-    console.log("Countdown is PAUSED");
-
-    clearInterval(this.state.intervalId);
-
-    this.setState({ isStarted: false });
-  };
-
   render() {
-    const { seconds, minutes, hours } = this.state;
+    const { seconds, minutes, hours, isStarted } = this.state;
 
     const stringifiedSeconds = String(seconds).padStart(2, "0");
     const stringifiedMinutes = String(minutes).padStart(2, "0");
@@ -99,7 +114,12 @@ export default class Countdown extends Component {
             </button>
           </li>
           <li className="button-list-item">
-            <button className="button" type="button" onClick={this.handleWait}>
+            <button
+              className="button"
+              type="button"
+              onClick={this.handleWait}
+              disabled={!isStarted}
+            >
               Wait
             </button>
           </li>
