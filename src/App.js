@@ -1,11 +1,11 @@
-import Countdown from "./components/Countdown";
-import Countdown2 from "./components/Countdown2";
+import Stopwatch from "./components/Stopwatch";
+import Stopwatch2 from "./components/Stopwatch2";
 
 function App() {
   return (
     <>
-      <Countdown />
-      <Countdown2 />
+      <Stopwatch />
+      <Stopwatch2 />
     </>
   );
 }

@@ -1,10 +1,10 @@
 import { Component } from "react";
-import "./Countdown.css";
+import "./Stopwatch.css";
 
 let array = [];
 let delta = 1000;
 
-export default class Countdown extends Component {
+export default class Stopwatch extends Component {
   state = {
     intervalId: null,
     isStarted: false,

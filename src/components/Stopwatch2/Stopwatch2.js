@@ -1,10 +1,10 @@
 import { useState, useCallback } from "react";
-import "./Countdown2.css";
+import "./Stopwatch2.css";
 
 let array = [];
 let delta = 1000;
 
-export default function Countdown2() {
+export default function Stopwatch2() {
   const [isStarted, setIsStarted] = useState(false);
   const [intervalId, setIntervalId] = useState(null);
   const [seconds, setSeconds] = useState(0);
