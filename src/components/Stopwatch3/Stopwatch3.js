@@ -1,6 +1,5 @@
 import { useState, useCallback } from "react";
 import { Observable } from "rxjs";
-
 import "./Stopwatch3.css";
 
 let array = [];
@@ -103,14 +102,19 @@ export default function Clock() {
           <button
             className="button"
             type="button"
-            onClick={handleWait}
             disabled={!isStarted}
+            onClick={handleWait}
           >
             Wait
           </button>
         </li>
         <li className="button-list-item">
-          <button className="button" type="button" onClick={handleReset}>
+          <button
+            className="button"
+            type="button"
+            disabled={!time}
+            onClick={handleReset}
+          >
             Reset
           </button>
         </li>
