@@ -1,2 +1,2 @@
 .clockface{display:flex;justify-content:center}.field{padding:30px}.value{display:block;font-size:60px}.button-list{display:block;margin:0 auto;padding:0;list-style:none}.button-list-item:not(:last-child){margin-bottom:20px}.button{padding:8px;border:1px solid #000;border-radius:5px;font-size:18px;background-color:#f8f8ff;cursor:pointer;transition:background-color .3s cubic-bezier(.4,0,.2,1),box-shadow .3s cubic-bezier(.4,0,.2,1)}.button:hover{background-color:#87ceeb;box-shadow:0 3px 4px rgba(0,0,0,.5)}body{display:block;text-align:center;font-family:"Montserrat",sans-serif;color:#181c27}
-/*# sourceMappingURL=main.ec891725.chunk.css.map */
+/*# sourceMappingURL=main.5b02d520.chunk.css.map */
