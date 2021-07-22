@@ -1,58 +1,42 @@
 import { useState, useCallback } from "react";
-import "./Stopwatch2.css";
+import { Observable } from "rxjs";
+
+import "./Stopwatch3.css";
 
 let array = [];
 let delta = 1000;
 
-export default function Stopwatch2() {
+const timer$ = new Observable((observer) => {
+  setInterval(() => {
+    observer.next(1000);
+  }, 1000);
+});
+
+export default function Clock() {
   const [isStarted, setIsStarted] = useState(false);
-  const [intervalId, setIntervalId] = useState(null);
-  const [seconds, setSeconds] = useState(0);
-  const [minutes, setMinutes] = useState(0);
-  const [hours, setHours] = useState(0);
+  const [subscription, setSubscription] = useState(null);
+  const [time, setTime] = useState(0);
 
   const handleStart = useCallback(() => {
     if (!isStarted) {
       console.log("Countdown is ON");
 
-      const id = setInterval(() => {
-        console.log("Tick");
-
-        setSeconds((prevSecondsState) => {
-          if (prevSecondsState === 59) {
-            setMinutes((prevMinutesState) => {
-              if (prevMinutesState === 59 && prevSecondsState === 59) {
-                setHours((prevHoursState) => {
-                  return prevHoursState + 1;
-                });
-
-                return 0;
-              }
-
-              return prevMinutesState + 1;
-            });
-
-            return 0;
-          }
-
-          return prevSecondsState + 1;
-        });
-      }, 1000);
-
-      setIntervalId(id);
       setIsStarted(!isStarted);
-    } else {
-      clearInterval(intervalId);
 
+      const timerSubscription = timer$.subscribe((value) => {
+        setTime((prevState) => prevState + value);
+      });
+
+      setSubscription(timerSubscription);
+    } else {
       console.log("Countdown is OFF");
 
-      setIntervalId(null);
+      subscription.unsubscribe();
+
       setIsStarted(!isStarted);
-      setSeconds(0);
-      setMinutes(0);
-      setHours(0);
+      setTime(0);
     }
-  }, [isStarted, intervalId]);
+  }, [isStarted, subscription]);
 
   const handleWait = useCallback(() => {
     array.push(Date.now());
@@ -65,42 +49,46 @@ export default function Stopwatch2() {
     if (delta <= 300) {
       console.log("Countdown is PAUSED");
 
-      clearInterval(intervalId);
+      subscription.unsubscribe();
 
       setIsStarted(false);
 
       array = [];
       delta = 1000;
     }
-  }, [intervalId]);
+  }, [subscription]);
 
   const handleReset = useCallback(() => {
     console.log("Countdown is RESET");
 
-    setSeconds(0);
-    setMinutes(0);
-    setHours(0);
+    setTime(0);
   }, []);
 
-  const stringifiedSeconds = String(seconds).padStart(2, "0");
-  const stringifiedMinutes = String(minutes).padStart(2, "0");
-  const stringifiedHours = String(hours).padStart(2, "0");
+  const pad = (value) => {
+    return String(value).padStart(2, "0");
+  };
+
+  const hours = pad(
+    Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+  );
+  const minutes = pad(Math.floor((time % (1000 * 60 * 60)) / (1000 * 60)));
+  const seconds = pad(Math.floor((time % (1000 * 60)) / 1000));
 
   return (
     <>
       <div className="clockface">
         <div className="field">
-          <span className="value">{stringifiedHours}</span>
+          <span className="value">{hours}</span>
           <span className="label">Hours</span>
         </div>
 
         <div className="field">
-          <span className="value">{stringifiedMinutes}</span>
+          <span className="value">{minutes}</span>
           <span className="label">Minutes</span>
         </div>
 
         <div className="field">
-          <span className="value">{stringifiedSeconds}</span>
+          <span className="value">{seconds}</span>
           <span className="label">Seconds</span>
         </div>
       </div>
